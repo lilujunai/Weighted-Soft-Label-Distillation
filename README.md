@@ -20,3 +20,19 @@ python dataset/img2lmdb.py --image_path 'the path of your image data' --list_pat
 + train_with_distillation.py: train the model with our distillation method
 + imagenet_train_cfg.py: all dataset and hyperparameter settings
 + knowledge_distiller.py: our weighted soft label distillation loss
+
+## Acknowledgments
+In this code we refer to the following implementations: [Overhaul](https://github.com/clovaai/overhaul-distillation)
+
+## Reference
+
+If you find this repo useful, please consider citing:
+
+```
+@inproceedings{zhou2021wsl,
+  title={Rethinking soft labels for knowledge distillation: a bias-variance tradeoff perspective},
+  author={Helong, Zhou and Liangchen, Song and Jiajie, Chen and Ye, Zhou and Guoli, Wang and Junsong, Yuan and Qian Zhang},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year={2021}
+}
+```
