@@ -6,11 +6,12 @@ import warnings
 
 import torch
 import torch.backends.cudnn as cudnn
+import torchvision.transforms as transforms
+import torchvision.datasets as datasets
 
 import models.MobileNet as Mov
 import models.ResNet as ResNet
 from imagenet_train_cfg import cfg as config
-from dataset import imagenet_data
 from dataset.prefetch_data import data_prefetcher
 from tools import utils
 
@@ -25,13 +26,29 @@ def main():
     if config.train_params.use_seed:
         utils.set_seed(config.train_params.seed)
 
-    imagenet = imagenet_data.ImageNet12(trainFolder=os.path.join(config.data.data_path, 'train_origin'),
-                                        testFolder=os.path.join(config.data.data_path, 'val_origin'),
-                                        num_workers=config.data.num_workers,
-                                        type_of_data_augmentation=config.data.type_of_data_aug,
-                                        data_config=config.data)
+    traindir = os.path.join(config.data.data_path, 'train')
+    valdir = os.path.join(config.data.data_path.data_path, 'val')
+    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                     std=[0.229, 0.224, 0.225])
 
-    train_loader, val_loader = imagenet.getTrainTestLoader(config.data.batch_size)
+    train_dataset = datasets.ImageFolder(traindir,
+                                         transforms.Compose([
+                                             transforms.RandomResizedCrop(224),
+                                             transforms.RandomHorizontalFlip(),
+                                             transforms.ToTensor(),
+                                             normalize])
+                                         )
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=config.data.batch_size, shuffle=True,
+                                               num_workers=config.data.num_workers, pin_memory=True, sampler=None)
+    val_dataset = datasets.ImageFolder(valdir,
+                                       transforms.Compose([
+                                           transforms.Resize(256),
+                                           transforms.CenterCrop(224),
+                                           transforms.ToTensor(),
+                                           normalize])
+                                       )
+    val_loader = torch.utils.data.DataLoader(val_dataset, batch_size=config.data.batch_size, shuffle=False,
+                                             num_workers=config.data.num_workers, pin_memory=True)
 
     if config.net_type == 'mobilenet':
         t_net = ResNet.resnet50(pretrained=True)

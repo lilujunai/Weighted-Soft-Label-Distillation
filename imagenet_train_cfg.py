@@ -26,21 +26,12 @@ __C.optim.if_resume=False
 __C.optim.resume_path=''
 
 __C.data=AttrDict()
-__C.data.data_path = 'PATH/TO/Imagenet-lmdb'
+__C.data.data_path = 'PATH/TO/Imagenet'
 __C.data.num_workers=32
 __C.data.batch_size=256
 __C.data.dataset='imagenet'
-__C.data.train_data_type='lmdb'
-__C.data.val_data_type='lmdb'
-__C.data.patch_dataset=False
 __C.data.num_examples=1281167
 __C.data.input_size=(3,224,224)
-__C.data.type_of_data_aug='random_sized'  # random_sized / rand_scale
-__C.data.random_sized=AttrDict()
-__C.data.random_sized.min_scale=0.08
-__C.data.mean=[0.485, 0.456, 0.406]
-__C.data.std=[0.229, 0.224, 0.225]
-__C.data.color=False
 
 __C.optim.cosine=AttrDict()
 __C.optim.cosine.use_restart=False
